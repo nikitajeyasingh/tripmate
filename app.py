@@ -14,6 +14,7 @@ load_dotenv()
 from tripmate import TripRequest, make_llm, plan_trip, revise_trip  # noqa: E402
 from tripmate.orchestrator import TEAM  # noqa: E402
 from tripmate.revision import EDITOR  # noqa: E402
+from tripmate.export import plan_to_html  # noqa: E402
 
 st.set_page_config(page_title="TripMate", page_icon="✈️", layout="wide")
 
@@ -122,7 +123,11 @@ if plan:
                 for t in r.tool_log:
                     st.markdown(f"**{t['tool']}** `{json.dumps(t['input'], ensure_ascii=False)}`")
                     st.code(t["output"][:1500], language="json")
-    st.download_button("⬇️ Download plan (.md)", plan.markdown, file_name="trip_plan.md", use_container_width=True)
+    d1, d2 = st.columns([3, 1])
+    d1.download_button("⬇️ Download trip plan (opens in any browser · print to PDF)",
+                       plan_to_html(plan.markdown, f"TripMate · {plan.brief.get('destination', 'Trip')}"),
+                       file_name="trip_plan.html", mime="text/html", type="primary", use_container_width=True)
+    d2.download_button("Markdown (.md)", plan.markdown, file_name="trip_plan.md", use_container_width=True)
 
     # ---- conversational revision ------------------------------------------ #
     st.subheader("💬 Want to change something?")

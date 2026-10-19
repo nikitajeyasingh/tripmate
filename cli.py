@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from tripmate import TripRequest, make_llm, plan_trip, revise_trip  # noqa: E402
+from tripmate.export import plan_to_html  # noqa: E402
 
 DIM, BOLD, PINK, GREEN, RESET = "\033[2m", "\033[1m", "\033[95m", "\033[92m", "\033[0m"
 
@@ -63,11 +64,13 @@ def main() -> None:
     plan = asyncio.run(plan_trip(req, llm=llm, emit=on_event, offline=a.offline))
 
     Path(a.out).write_text(plan.markdown, encoding="utf-8")
+    html_out = Path(a.out).with_suffix(".html")
+    html_out.write_text(plan_to_html(plan.markdown, f"TripMate · {req.destination}"), encoding="utf-8")
     s = plan.stats
     print(f"\n{BOLD}Done in {s['seconds']}s{RESET} · {s['agents']} agents · {s['agent_runs']} agent runs · "
           f"{s['tool_calls']} tool calls · {s['revisions']} revision(s) · review {s['review_score']}/10 · "
           f"tokens {s['tokens_in']:,} in / {s['tokens_out']:,} out · data: {', '.join(s['data_sources'])}")
-    print(f"Plan saved to {BOLD}{a.out}{RESET}")
+    print(f"Plan saved to {BOLD}{a.out}{RESET} and {BOLD}{html_out}{RESET} (open it in a browser)")
 
     # ---- conversational revision ---------------------------------------- #
     if a.chat:
