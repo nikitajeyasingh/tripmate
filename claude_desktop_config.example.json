@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tripmate-travel": {
+      "command": "python",
+      "args": ["/ABSOLUTE/PATH/TO/tripmate/mcp_server/travel_server.py"]
+    }
+  }
+}
