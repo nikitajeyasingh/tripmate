@@ -15,8 +15,6 @@ Built with **Claude** (tool use), a custom **MCP server + client**, four live
 → 8 agents · ~15–20 live tool calls · a self-review loop · about 2 minutes.
 Then chat to change it: *"make Day 2 more relaxed"*, *"one of us is vegan now"*.
 
-📘 **New to the code? Read [BUILD_GUIDE.md](BUILD_GUIDE.md)**: a step-by-step guide to how it's built.
-
 ---
 
 ## Architecture
