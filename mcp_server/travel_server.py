@@ -33,7 +33,10 @@ import fixtures  # noqa: E402
 mcp = FastMCP("tripmate-travel", log_level="WARNING")
 
 OFFLINE = os.getenv("TRIPMATE_OFFLINE") == "1"
-HEADERS = {"User-Agent": "TripMate/1.0 (interview demo project)"}
+# Wikipedia's robot policy requires a User-Agent with contact info; generic ones get a 403.
+# https://meta.wikimedia.org/wiki/User-Agent_policy
+CONTACT = "https://github.com/nikitajeyasingh/tripmate"
+HEADERS = {"User-Agent": f"TripMate/1.0 ({CONTACT}) python-httpx", "Api-User-Agent": f"TripMate/1.0 ({CONTACT})"}
 TIMEOUT = 10.0
 
 

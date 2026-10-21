@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import re
 from datetime import date, timedelta
 
 import streamlit as st
@@ -38,8 +39,11 @@ st.markdown('<div class="crew">' + "".join(f"<span>{a.emoji} {a.name}</span>" fo
 
 def money(text: str) -> str:
     """Streamlit reads text between two $ signs as a LaTeX math formula, so
-    "$35 + subway $6" renders as garbled math. Escaping $ keeps it as dollars."""
-    return text.replace("\\$", "$").replace("$", "\\$")
+    "$35 + subway $6" renders as garbled math. Escaping $ keeps it as dollars.
+    Code spans (`...`) are left alone: inside them a backslash shows literally."""
+    parts = re.split(r"(`[^`\n]*`)", text)
+    return "".join(part if part.startswith("`") else part.replace("\\$", "$").replace("$", "\\$")
+                   for part in parts)
 
 
 PRESETS = {
